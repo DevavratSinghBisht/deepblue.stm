@@ -1,5 +1,5 @@
-from mutagen.wave import WAVE
-from mutagen.mp3 import MP3
+from pydub import AudioSegment
+from moviepy.editor import VideoFileClip
 
 def format_time(length: int) -> tuple:
     '''
@@ -25,14 +25,8 @@ def get_meeting_length_from_audio(audio_path: str) -> tuple:
     :return (tuple): length of audio file in (hours, mins, seconds) format
     '''
 
-    audio_format = audio_path.split('.')[-1]
-
-    if audio_format == "mp3":
-        audio = MP3(audio_path)
-    else :
-        audio = WAVE(audio_path)
-
-    length = int(audio.info.length)
+    audio = AudioSegment.from_file(audio_path)
+    length = int(audio.duration_seconds)
     
     return format_time(length)
 
@@ -52,5 +46,16 @@ def get_meeting_length_from_text(text: str) -> tuple:
     return format_time(length)
 
 
+def video_to_audio(video_path: str, audio_path: str) -> None:
+    '''
+    Extracts audio from a video file. Converts mp4 file to wav file.
+    Though the code can work for different video and audio file formats,
+    it is suggested to use .wav audio format, other formats may cause unexpected results.
 
-
+    :param video_path: path to the video file that is to be used
+    :param audio_path: path to the audio file that is to be saved
+    :return: None
+    '''
+    
+    video = VideoFileClip(video_path)
+    video.audio.write_audiofile(audio_path)
