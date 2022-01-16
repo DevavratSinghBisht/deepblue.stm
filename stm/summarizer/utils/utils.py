@@ -45,6 +45,16 @@ def get_meeting_length_from_text(text: str) -> tuple:
     length = (num_words / 115) * 60 # length in seconds
     return format_time(length)
 
+def mp3_to_wav(src, dest):
+    '''
+    Converts .mp3 to .wav format and saves at the destination location.
+    :param src: path to the .mp3 audio file that is to be used
+    :param dest: path to the .wav audio file that is to be saved
+    :return: None
+    '''
+                                                               
+    sound = AudioSegment.from_mp3(src)
+    sound.export(dest, format="wav")
 
 def video_to_audio(video_path: str, audio_path: str) -> None:
     '''
