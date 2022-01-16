@@ -123,6 +123,17 @@ class Meeting:
 
         return meeting_str[:-1]
 
+    def duration(self):
+        '''
+        Finds the duration of the meeting.
+
+        :return (tuple): length/duration of meeting in (hours, mins, seconds) format
+        '''
+        
+        hour, min, sec = self.meeting[-1].end_time.split(":")
+        hour, min, sec = int(hour), int(min), int(float(sec))
+        return (hour, min, sec)
+
 class TeamsMeet(Meeting):
     '''
     Class to deals with a single MicroSoft Teams meeting.
