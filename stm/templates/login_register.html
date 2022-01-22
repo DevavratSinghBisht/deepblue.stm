@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+
+    <meta charset="UTF-8">
+    <title>Login and Signup form</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+  </head>
+
+  <body>
+
+    <div class="page-wrap">
+      
+      <div class="logo-section">
+         <img src="{% static 'img/logo.png' %}" alt="" class="logo">
+          <h1>NLP Login</h1>
+      </div> 
+      
+      <div class="login-section">
+        
+        <h1>Sign-In NLP Account</h1>
+
+        <form action="login" class="signInForm" method="post">
+        {% csrf_token %}
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="input-control"  name="username" placeholder="Username">
+          </div>
+        
+          <div class="form-group">
+            <label for="username">Password</label>
+            <input type="password" id="password" class="input-control" name="password" placeholder="Password">
+          </div>
+        
+          <div class="form-group">
+            <button class="btn-login">Login</button>
+          </div>
+        
+        </form>
+
+        
+        <form action="register" class="signUpForm hidden" method="post">
+        {% csrf_token %}
+
+          <div class="form-group">
+            <label for="username">Name</label>
+            <input type="text" id="username" class="input-control" name="name" placeholder="Name">
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="input-control" name="username" placeholder="Username">
+          </div>
+
+          <div class="form-group">
+            <label for="username">Email</label>
+            <input type="text" id="email" class="input-control" name="email" placeholder="Email">
+           </div>
+
+          <div class="form-group">
+            <label for="username">Password</label>
+            <input type="password" id="password" class="input-control" name="password" placeholder="Password">
+          </div>
+
+           <div class="form-group">
+            <label for="username">Re-type Password</label>
+            <input type="password" id="password" class="input-control" name="repeat_password" placeholder="Re-type Password">
+           </div>
+
+          <div class="form-group">
+            <button class="btn-login">Sign Up</button>
+          </div>
+
+        </form>
+
+        <p class="pConent signUpText">New to NLP? 
+          <a href="#" id="SignUpbtn">Sign Up</a>
+        </p>
+
+        <p class="pConent signInText hidden">Already Registered? 
+          <a href="#" id="SignInbtn">Sign In</a>
+        </p>
+
+      </div>
+    
+    </div>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script  src="{% static 'js/script.js' %}"></script>
+
+  </body>
+
+</html>
