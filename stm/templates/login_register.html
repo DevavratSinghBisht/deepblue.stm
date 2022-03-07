@@ -37,7 +37,7 @@
             
             <h1>Sign-In NLP Account</h1>
 
-            <form action="login" class="signInForm" method="post">
+            <form action="/user_manager/login" class="signInForm" method="post">
             {% csrf_token %}
 
                 <div class="form-group">
@@ -57,7 +57,7 @@
             </form>
 
 
-            <form action="register" class="signUpForm hidden" method="post">
+            <form action="/user_manager/register" class="signUpForm hidden" method="post">
             {% csrf_token %}
 
               <div class="form-group">

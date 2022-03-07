@@ -48,10 +48,10 @@
                 
                 <br><br><br>
 
-                <form action="#TODO" name="Upload form" >
+                <form action="/" name="summary_form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                    <input type="file" id="myFile" name="filename">
+                    <input type="file" id="meeting_file" name="meeting_file">
                     <input type="submit" style="background-color:white">
             
                 </form>
@@ -59,13 +59,15 @@
         </div>
                   
         <!-- For Printing the output-->
-        <!--<div name="output_Div">
-                  			
-            {% for message in messages %}
-                <h3> {{message}}</h3>
-            {% endfor %}
+        <div name="output_Div">
 
-        </div> -->
+            {{summary}}
+                  			
+            <!-- {% for message in messages %}
+                <h3> {{message}}</h3>
+            {% endfor %} -->
+
+        </div>
 
     </body>
 
