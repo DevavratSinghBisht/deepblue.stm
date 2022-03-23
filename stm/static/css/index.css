@@ -2174,16 +2174,16 @@ textarea.w-input, textarea.w-select {
 /* ==========================================================================
    Start of custom Webflow CSS
    ========================================================================== */
-body {
-  padding-top: 126px;
-  background-color: #000;
-  background-image: linear-gradient(to right bottom, #A350D4, #2720F2);
-  background-size: cover;
-  font-family: 'Roboto Condensed', sans-serif;
-  color: #fff;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
+   body {
+    padding-top: 126px;
+    background-color: #000;
+    background-image: linear-gradient(to right, #0dcaf0, #2720F2);
+    background-size: cover;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #fff;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
 }
 
 h1 {
