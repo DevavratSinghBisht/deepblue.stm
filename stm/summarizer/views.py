@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http.response import HttpResponse
 from django.core.files.storage import FileSystemStorage
 
@@ -8,12 +8,18 @@ from .models import summarizer, asr
 from pathlib import Path
 import itertools
 import os
+import docx
+import mimetypes
 
 def summary(request):
     
     if request.method == 'POST':
         file = request.FILES['meeting_file']
+        max_slp = int(request.POST.get('max_sum_len', False)) / 100 # max_summary_len_percent
+        min_slp = int(request.POST.get('min_sum_len', False)) / 100 # min_summary_len_percent
 
+        print("Dev", max_slp, min_slp)
+        
         doc_extensions = ['doc', 'docx']
         audio_extensions = ['mp3', 'wav']
         video_extensions = ['mp4']
@@ -33,7 +39,7 @@ def summary(request):
 
             if extension in doc_extensions:
                 meet = TeamsMeet.from_doc(file_location)
-                summary = summarizer.summarize(meet.as_str())
+                summary = summarizer.summarize(meet.as_str(), max_slp, min_slp)
 
             elif extension in audio_extensions:
 
@@ -46,15 +52,23 @@ def summary(request):
                     wav_file_path = file_location
                 
                 # print(asr.recognize(wav_file_path))
-                summary = summarizer.summarize(asr.recognize(wav_file_path)[0])
+                summary = summarizer.summarize(asr.recognize(wav_file_path)[0], max_slp, min_slp)
 
             elif extension in video_extensions:
                 Path('summarizer/data/wav/').mkdir(exist_ok=True, parents=True)
                 wav_file_path = 'summarizer/data/wav/' + os.path.splitext(f)[0] + '.wav'
                 video_to_audio(file_location, wav_file_path)
-                summary = summarizer.summarize(asr.recognize(wav_file_path)[0])
+                summary = summarizer.summarize(asr.recognize(wav_file_path)[0], max_slp, min_slp)
 
-            return render(request, 'index.html', {'summary': summary})
+            Path('summarizer/data/generated/').mkdir(exist_ok=True, parents=True)
+            doc =docx.Document()
+            doc.add_paragraph(summary)
+            summary_doc_path = 'summarizer/data/generated/' + f
+            doc.save(summary_doc_path)
+
+            request.session['summary_doc_path'] = summary_doc_path
+
+            return render(request, 'summary.html', {'summary': summary})
 
         else:
             data = f'File Extension not supported please uploat from {suported_extensions}'
@@ -62,3 +76,14 @@ def summary(request):
     
     else: 
         return render(request, 'index.html')
+
+def download(request):
+
+    summary_doc_path = request.session['summary_doc_path']
+    path = open(summary_doc_path, 'rb')
+    mime_type, _ = mimetypes.guess_type(summary_doc_path)
+    response = HttpResponse(path, content_type=mime_type)
+    print("File path", summary_doc_path)
+    response['Content-Disposition'] = f"attachment; filename=summary.docx"
+    return response
+    

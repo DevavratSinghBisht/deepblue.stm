@@ -100,7 +100,7 @@ class Meeting:
         with open(file, "w") as f:
             json.dump(meeting_list, f, indent = 4)
 
-    def as_str(self, delimiter:str = " ", include_speaker = True, concat_str:str = " said ") -> str:
+    def as_str(self, delimiter:str = " ", include_speaker = True, concat_str:str = " said ", max_len=512) -> str:
         '''
         Method for getting the meeting data as a string.
         Creats a string containing all the statements.
@@ -109,19 +109,31 @@ class Meeting:
         :param delimiter: used as a seperator betting two statements
         :param include_speaker: to concatenate the speaker name before the statement or not
         :param concat_str: string concatentaed in between speaker and the statement
-        :return: string containing all the statements of the meeting
+        :param max_len: maximum number of words a single string can have
+        :return: list of string containing all the statements of the meeting
         '''
 
         meeting_str = ""
+        meeting_list = []
 
         if include_speaker:
             for statement in self.meeting:
-                meeting_str += statement.speaker + concat_str + statement.statement + delimiter
+                new_str = statement.speaker + concat_str + statement.statement + delimiter
+                if len((meeting_str + new_str).split()) > max_len:
+                    meeting_list.append(meeting_str)
+                    meeting_str = new_str[:-1]
+                else:
+                    meeting_str += new_str
         else:
             for statement in self.meeting:
-                meeting_str += statement.statement + delimiter
+                new_str = statement.statement + delimiter
+                if len((meeting_str + new_str).split()) > max_len:
+                    meeting_list.append(meeting_str)
+                    meeting_str = new_str[:-1]
+                else:
+                    meeting_str += new_str
 
-        return meeting_str[:-1]
+        return meeting_list
 
     def duration(self):
         '''
