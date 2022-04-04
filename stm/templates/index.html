@@ -30,10 +30,67 @@
                 n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
             }(window, document);
         </script>
+        <style>
+            .button1 {
+            text-align: center;
+            position: relative;
+            padding: 8px 16px;
+            background: #ffc107;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-top: 50px;
+            width: 300px;
+            }
+
+            .button:active {
+            background: #007a63;
+            }
+
+            .button__text {
+            font: bold 20px "Quicksand", san-serif;
+            color: #ffffff;
+            transition: all 0.2s;
+            }
+
+            .button--loading .button__text {
+            visibility: hidden;
+            opacity: 0;
+            }
+
+            .button--loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+            }
+
+            @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+
+            to {
+                transform: rotate(1turn);
+            }
+            }
+            
+        </style>
 
     </head>
 
     <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
                   
         <div class="container w-container" name="Body_of_page" >
             
@@ -54,22 +111,35 @@
                     <input type="file" id="meeting_file" name="meeting_file">
                     <input type="number" id="max_sum_len" name="max_sum_len" min="0" max="100" placeholder="Max Sum Len %">
                     <input type="number" id="min_sum_len" name="min_sum_len" min="0" max="100" placeholder="Min Sum Len %">
-                    <input type="submit" style="background-color:white">
+                    <br>
+                    <button type="submit" class="button1" onclick="this.classList.toggle('button--loading')">
+                        <span class="button__text">Submit</span>
+                    </button>
             
                 </form>
+                <!-- code will not allow min_sum_len to be grater than max_sum_len -->
+                <script>
+                    var $max = $('[name=max_sum_len]');
+                    var $min = $('[name=min_sum_len]');
+
+                    $min.on('keyup keydown', function(e) {
+                    var maxi = parseInt($max.val());
+                    var mini = parseInt($min.val()); 
+
+                    if (mini > maxi &&
+                        e.keyCode !== 46 
+                        &&
+                        e.keyCode !== 8 
+                    ) {
+                        e.preventDefault();
+                        $min.val('');
+                    }
+                    })
+                </script>
             </div>
         </div>
-                  
-        <!-- For Printing the output-->
-        <div name="output_Div" style="font-size: 13px;margin-top: 40px;text-align: justify;margin-right: 200px;margin-left: 200px;">
-
-            {{summary}}
-            
-            {% for message in messages %}
-                <h3>{{message}}</h3>
-            {% endfor %}
-
-        </div>
+        
+    
 
     </body>
 
