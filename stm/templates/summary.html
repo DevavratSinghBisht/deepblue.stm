@@ -30,6 +30,79 @@
                 n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
             }(window, document);
         </script>
+        <style>
+            html,
+.root1 {
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+}
+
+body1 {
+  font: menu;
+  font-size: 1rem;
+  line-height: 1.4;
+  padding: 0;
+  margin: 0;
+}
+section {
+  padding-top: 4rem;
+  width: 90%;
+  margin: auto;
+}
+details[open] summary ~ * {
+  animation: open 0.3s ease-in-out;
+}
+
+@keyframes open {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary {
+  width: 100%;
+  padding: 1.3rem 0;
+  border-top: 1px solid rgb(255, 255, 255);
+  position: relative;
+  cursor: pointer;
+  font-size: 1.25rem;
+  font-weight: 300;
+  list-style: none;
+}
+
+details summary:after {
+  content: "+";
+  color: rgb(255, 255, 255);
+  position: absolute;
+  font-size: 1.75rem;
+  line-height: 0;
+  margin-top: 0.75rem;
+  right: 0;
+  font-weight: 200;
+  transform-origin: center;
+  transition: 200ms linear;
+}
+details[open] summary:after {
+  transform: rotate(45deg);
+  font-size: 2rem;
+}
+details summary {
+  outline: 0;
+}
+details p1 {
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
+  padding-top: 1rem;
+}
+
+        </style>
 
     </head>
 
@@ -51,14 +124,14 @@
                 <form action="/download" name="summary_download_form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                    <input type="submit" style="background-color:white">
+                    <input type="submit" style="background-color:white" value="Download">
             
                 </form>
             </div>
         </div>
                   
         <!-- For Printing the output-->
-        <div name="output_Div" style="font-size: 13px;margin-top: 40px;text-align: justify;margin-right: 200px;margin-left: 200px;">
+        <!-- <div name="output_Div" style="font-size: 13px;margin-top: 40px;text-align: justify;margin-right: 200px;margin-left: 200px;">
 
             {{summary}}
             
@@ -66,7 +139,37 @@
                 <h3>{{message}}</h3>
             {% endfor %}
 
-        </div>
+        </div> -->
+
+        <Section>
+            <details>
+              <summary>Action Points</summary>
+              <p1>
+                <div style="font-size: 13px;margin-top: 40px;text-align: justify;">
+                    <p1>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Proin et mauris in justo eleifend suscipit.
+                        Ut maximus nunc sit amet iaculis rhoncus.
+                        Nunc vehicula felis eu tincidunt consectetur.
+                        Etiam in turpis id sem sodales congue.
+                        Cras ac leo eu libero mollis fringilla.
+                        Duis tempus libero pellentesque, blandit ante non, tempor libero.</p1>
+                </div>    
+              </p1>
+            </details>
+            <details>
+              <summary>Summary</summary>
+              <p1>
+                    <div style="font-size: 15px;margin-top: 40px;text-align: justify; background-color: white; color: black; padding: 10px">
+                        {{summary}}
+                    
+                        {% for message in messages %}
+                            <h3>{{message}}</h3>
+                        {% endfor %}
+                    </div>
+              </p1>
+            </details>
+          </Section>
+          
 
     </body>
 
