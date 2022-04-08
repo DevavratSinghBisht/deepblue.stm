@@ -154,14 +154,16 @@ details p1 {
               <summary>Action Points</summary>
               <p1>
                 <div style="font-size: 13px;margin-top: 40px;text-align: justify;">
-                    <p1>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Proin et mauris in justo eleifend suscipit.
-                        Ut maximus nunc sit amet iaculis rhoncus.
-                        Nunc vehicula felis eu tincidunt consectetur.
-                        Etiam in turpis id sem sodales congue.
-                        Cras ac leo eu libero mollis fringilla.
-                        Duis tempus libero pellentesque, blandit ante non, tempor libero. font-size: 18px;
-                        margin-top: 25px;</p1>
+                    <p1>
+                      
+                      {% if messages %}
+                        <ul class="messages">
+                          {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </p1>
                 </div>    
               </p1>
             </details>

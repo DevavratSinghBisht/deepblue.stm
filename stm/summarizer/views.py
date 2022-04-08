@@ -1,9 +1,10 @@
 from django.shortcuts import redirect, render
 from django.http.response import HttpResponse
 from django.core.files.storage import FileSystemStorage
+from django.contrib import messages
 
 from .utils import *
-from .models import summarizer, asr
+from .models import summarizer, asr, action_point_classifier
 
 from pathlib import Path
 import itertools
@@ -49,6 +50,9 @@ def summary(request):
                 meet = TeamsMeet.from_doc(file_location)
                 meeting_len = meet.duration()
                 num_speakers = f"There are {meet.num_speakers()} participants in the meeting."
+                action_points = action_point_classifier.get_action_points(meet)
+                for ap in action_points:
+                    messages.add_message(request, messages.INFO, ap)
                 summary = summarizer.summarize(meet.as_str(), max_slp, min_slp)
 
             elif extension in audio_extensions:
@@ -65,6 +69,9 @@ def summary(request):
                 text = asr.recognize(wav_file_path)[0]
                 meeting_len = get_meeting_length_from_text(text)
                 num_speakers = "Number of speakers can only be found for transcripts."
+                action_points = action_point_classifier.get_action_points(text)
+                for ap in action_points:
+                    messages.add_message(request, messages.INFO, ap)
                 summary = summarizer.summarize(text, max_slp, min_slp)
 
             elif extension in video_extensions:
@@ -74,6 +81,9 @@ def summary(request):
                 text = asr.recognize(wav_file_path)[0]
                 meeting_len = get_meeting_length_from_text(text)
                 num_speakers = "Number of speakers can only be found for transcripts."
+                action_points = action_point_classifier.get_action_points(text)
+                for ap in action_points:
+                    messages.add_message(request, messages.INFO, ap)
                 summary = summarizer.summarize(text, max_slp, min_slp)
 
             Path('summarizer/data/generated/').mkdir(exist_ok=True, parents=True)
@@ -85,7 +95,7 @@ def summary(request):
 
             request.session['summary_doc_path'] = summary_doc_path
 
-            return render(request, 'summary.html', {'summary': summary, 'meeting_len': meeting_len, 'num_speakers': num_speakers})
+            return render(request, 'summary.html', {'summary': summary, 'meeting_len': meeting_len, 'num_speakers': num_speakers, 'action_points': action_points})
 
         else:
             data = f'File Extension not supported please uploat from {suported_extensions}'
