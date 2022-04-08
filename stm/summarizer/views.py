@@ -15,9 +15,18 @@ def summary(request):
     
     if request.method == 'POST':
         file = request.FILES['meeting_file']
-        print("Dev", request.POST.get('max_sum_len', 70), request.POST.get('min_sum_len', 30))
-        max_slp = int(request.POST.get('max_sum_len', 70)) / 100 # max_summary_len_percent
-        min_slp = int(request.POST.get('min_sum_len', 30)) / 100 # min_summary_len_percent
+
+        max_slp = request.POST.get('max_sum_len', 70) # max_summary_len_percent
+        if max_slp == "":
+            max_slp = 0.7
+        else:
+            max_slp = int(max_slp) / 100
+
+        min_slp = request.POST.get('min_sum_len', 30)
+        if min_slp == "":
+            min_slp = 0.3
+        else:    
+            min_slp = int(min_slp) / 100 # min_summary_len_percent
         
         doc_extensions = ['doc', 'docx']
         audio_extensions = ['mp3', 'wav']
