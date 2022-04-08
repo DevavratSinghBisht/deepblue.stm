@@ -1,5 +1,6 @@
 samples/
 stm/summarizer/data/*
+stm/summarizer/huggingface_models/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
