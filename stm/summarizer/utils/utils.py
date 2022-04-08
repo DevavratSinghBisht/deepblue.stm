@@ -15,7 +15,7 @@ def format_time(length: int) -> tuple:
     length %= 60
     seconds = length  # calculate in seconds
   
-    return f"{hours} hours, {mins} mins and {seconds} seconds"
+    return f"{hours} hours, {mins} minutes and {seconds} seconds"
 
 def get_meeting_length_from_audio(audio_path: str) -> tuple:
     '''

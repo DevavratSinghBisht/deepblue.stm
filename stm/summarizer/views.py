@@ -49,7 +49,7 @@ def summary(request):
             if extension in doc_extensions:
                 meet = TeamsMeet.from_doc(file_location)
                 meeting_len = meet.duration()
-                num_speakers = f"There are {meet.num_speakers()} participants in the meeting."
+                num_speakers = str(meet.num_speakers())
                 action_points = action_point_classifier.get_action_points(meet)
                 for ap in action_points:
                     messages.add_message(request, messages.INFO, ap)
@@ -68,7 +68,7 @@ def summary(request):
                 # print(asr.recognize(wav_file_path))
                 text = asr.recognize(wav_file_path)[0]
                 meeting_len = get_meeting_length_from_audio(wav_file_path)
-                num_speakers = "Number of speakers can only be found for transcripts."
+                num_speakers = "Number of speakers can only be found using transcripts."
                 action_points = action_point_classifier.get_action_points(text)
                 for ap in action_points:
                     messages.add_message(request, messages.INFO, ap)
@@ -88,7 +88,13 @@ def summary(request):
 
             Path('summarizer/data/generated/').mkdir(exist_ok=True, parents=True)
             doc =docx.Document()
-            doc.add_paragraph("Summary:\n")
+            doc.add_heading('STM 4', 0)
+            doc.add_paragraph("Meeting Duration: " + meeting_len)
+            doc.add_paragraph("Number of Participants: " + num_speakers)
+            doc.add_paragraph("Action Points:")
+            for ap in action_points:
+                doc.add_paragraph(ap, style='List Bullet 2')
+            doc.add_paragraph("Summary:")
             doc.add_paragraph(summary)
             summary_doc_path = 'summarizer/data/generated/' + f
             doc.save(summary_doc_path)

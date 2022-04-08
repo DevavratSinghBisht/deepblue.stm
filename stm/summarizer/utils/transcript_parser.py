@@ -144,7 +144,7 @@ class Meeting:
         
         hour, min, sec = self.meeting[-1].end_time.split(":")
         hour, min, sec = int(hour), int(min), int(float(sec))
-        return f"{hour} hours, {min} mins and {sec} seconds"
+        return f"{hour} hours, {min} minutes and {sec} seconds"
 
     def num_speakers(self):
         '''
