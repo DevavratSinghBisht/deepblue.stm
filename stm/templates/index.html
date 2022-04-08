@@ -109,8 +109,8 @@
                 {% csrf_token %}
 
                     <input type="file" id="meeting_file" name="meeting_file">
-                    <input type="number" id="max_sum_len" name="max_sum_len" min="0" max="100" placeholder="Max Sum Len %">
-                    <input type="number" id="min_sum_len" name="min_sum_len" min="0" max="100" placeholder="Min Sum Len %">
+                    <input type="number" id="max_sum_len" name="max_sum_len" min="0" max="100" placeholder="70">
+                    <input type="number" id="min_sum_len" name="min_sum_len" min="0" max="100" placeholder="30">
                     <br>
                     <button type="submit" class="button1" onclick="this.classList.toggle('button--loading')">
                         <span class="button__text">Submit</span>
