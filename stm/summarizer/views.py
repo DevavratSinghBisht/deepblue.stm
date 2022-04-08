@@ -15,10 +15,9 @@ def summary(request):
     
     if request.method == 'POST':
         file = request.FILES['meeting_file']
-        max_slp = int(request.POST.get('max_sum_len', False)) / 100 # max_summary_len_percent
-        min_slp = int(request.POST.get('min_sum_len', False)) / 100 # min_summary_len_percent
-
-        print("Dev", max_slp, min_slp)
+        print("Dev", request.POST.get('max_sum_len', 70), request.POST.get('min_sum_len', 30))
+        max_slp = int(request.POST.get('max_sum_len', 70)) / 100 # max_summary_len_percent
+        min_slp = int(request.POST.get('min_sum_len', 30)) / 100 # min_summary_len_percent
         
         doc_extensions = ['doc', 'docx']
         audio_extensions = ['mp3', 'wav']
@@ -39,6 +38,8 @@ def summary(request):
 
             if extension in doc_extensions:
                 meet = TeamsMeet.from_doc(file_location)
+                meeting_len = meet.duration()
+                num_speakers = f"There are {meet.num_speakers()} participants in the meeting."
                 summary = summarizer.summarize(meet.as_str(), max_slp, min_slp)
 
             elif extension in audio_extensions:
@@ -52,23 +53,30 @@ def summary(request):
                     wav_file_path = file_location
                 
                 # print(asr.recognize(wav_file_path))
-                summary = summarizer.summarize(asr.recognize(wav_file_path)[0], max_slp, min_slp)
+                text = asr.recognize(wav_file_path)[0]
+                meeting_len = get_meeting_length_from_text(text)
+                num_speakers = "Number of speakers can only be found for transcripts."
+                summary = summarizer.summarize(text, max_slp, min_slp)
 
             elif extension in video_extensions:
                 Path('summarizer/data/wav/').mkdir(exist_ok=True, parents=True)
                 wav_file_path = 'summarizer/data/wav/' + os.path.splitext(f)[0] + '.wav'
                 video_to_audio(file_location, wav_file_path)
-                summary = summarizer.summarize(asr.recognize(wav_file_path)[0], max_slp, min_slp)
+                text = asr.recognize(wav_file_path)[0]
+                meeting_len = get_meeting_length_from_text(text)
+                num_speakers = "Number of speakers can only be found for transcripts."
+                summary = summarizer.summarize(text, max_slp, min_slp)
 
             Path('summarizer/data/generated/').mkdir(exist_ok=True, parents=True)
             doc =docx.Document()
+            doc.add_paragraph("Summary:\n")
             doc.add_paragraph(summary)
             summary_doc_path = 'summarizer/data/generated/' + f
             doc.save(summary_doc_path)
 
             request.session['summary_doc_path'] = summary_doc_path
 
-            return render(request, 'summary.html', {'summary': summary})
+            return render(request, 'summary.html', {'summary': summary, 'meeting_len': meeting_len, 'num_speakers': num_speakers})
 
         else:
             data = f'File Extension not supported please uploat from {suported_extensions}'

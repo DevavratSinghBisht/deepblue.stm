@@ -139,12 +139,25 @@ class Meeting:
         '''
         Finds the duration of the meeting.
 
-        :return (tuple): length/duration of meeting in (hours, mins, seconds) format
+        :return (str): duration of meeting in hours, mins, seconds format
         '''
         
         hour, min, sec = self.meeting[-1].end_time.split(":")
         hour, min, sec = int(hour), int(min), int(float(sec))
-        return (hour, min, sec)
+        return f"{hour} hours, {min} mins and {sec} seconds"
+
+    def num_speakers(self):
+        '''
+        Returns the number of speakers in the meeting.
+        returns
+        '''
+        speakers= []
+        for m in self.meeting:
+            speakers.append(m.speaker)
+        
+        return len(set(speakers))
+
+
 
 class TeamsMeet(Meeting):
     '''
