@@ -140,6 +140,14 @@ details p1 {
             {% endfor %}
 
         </div> -->
+        <div style="width: 100%;">
+          <div style="width: 50%; float: left; font-size: 18px; margin-top: 25px;"> 
+            Meeting Duration : {{meeting_len}}
+          </div>
+          <div style="width: 50%; float: left; font-size: 18px; margin-top: 25px;""> 
+            {{num_speakers}} 
+          </div>
+      </div>
 
         <Section>
             <details>
@@ -152,7 +160,8 @@ details p1 {
                         Nunc vehicula felis eu tincidunt consectetur.
                         Etiam in turpis id sem sodales congue.
                         Cras ac leo eu libero mollis fringilla.
-                        Duis tempus libero pellentesque, blandit ante non, tempor libero.</p1>
+                        Duis tempus libero pellentesque, blandit ante non, tempor libero. font-size: 18px;
+                        margin-top: 25px;</p1>
                 </div>    
               </p1>
             </details>
@@ -160,8 +169,8 @@ details p1 {
               <summary>Summary</summary>
               <p1>
                     <div style="font-size: 15px;margin-top: 40px;text-align: justify; background-color: white; color: black; padding: 10px">
-                        {{meeting_len}}
-                        {{num_speakers}}
+                        
+                        
                         {{summary}}                    
                     </div>
               </p1>
