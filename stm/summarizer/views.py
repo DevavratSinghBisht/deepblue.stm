@@ -67,7 +67,7 @@ def summary(request):
                 
                 # print(asr.recognize(wav_file_path))
                 text = asr.recognize(wav_file_path)[0]
-                meeting_len = get_meeting_length_from_text(text)
+                meeting_len = get_meeting_length_from_audio(wav_file_path)
                 num_speakers = "Number of speakers can only be found for transcripts."
                 action_points = action_point_classifier.get_action_points(text)
                 for ap in action_points:
@@ -79,7 +79,7 @@ def summary(request):
                 wav_file_path = 'summarizer/data/wav/' + os.path.splitext(f)[0] + '.wav'
                 video_to_audio(file_location, wav_file_path)
                 text = asr.recognize(wav_file_path)[0]
-                meeting_len = get_meeting_length_from_text(text)
+                meeting_len = get_meeting_length_from_audio(wav_file_path)
                 num_speakers = "Number of speakers can only be found for transcripts."
                 action_points = action_point_classifier.get_action_points(text)
                 for ap in action_points:
