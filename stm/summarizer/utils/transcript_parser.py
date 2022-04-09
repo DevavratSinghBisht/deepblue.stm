@@ -118,20 +118,27 @@ class Meeting:
 
         if include_speaker:
             for statement in self.meeting:
-                new_str = statement.speaker + concat_str + statement.statement + delimiter
-                if len((meeting_str + new_str).split()) > max_len:
-                    meeting_list.append(meeting_str)
-                    meeting_str = new_str[:-1]
-                else:
-                    meeting_str += new_str
+                if statement != "":
+                    new_str = statement.speaker + concat_str + statement.statement + delimiter
+                    if len((meeting_str + new_str).split()) > max_len:
+                        meeting_list.append(meeting_str)
+                        meeting_str = new_str
+                    else:
+                        meeting_str += new_str
         else:
             for statement in self.meeting:
-                new_str = statement.statement + delimiter
-                if len((meeting_str + new_str).split()) > max_len:
-                    meeting_list.append(meeting_str)
-                    meeting_str = new_str[:-1]
-                else:
-                    meeting_str += new_str
+                if statement != "":
+                    new_str = statement.statement + delimiter
+                    if len((meeting_str + new_str).split()) > max_len:
+                        meeting_list.append(meeting_str)
+                        meeting_str = new_str
+                    else:
+                        meeting_str += new_str
+
+        if len(meeting_list)== 0:
+            meeting_list.append(meeting_str)
+        elif meeting_str != meeting_list[-1]:
+            meeting_list.append(meeting_str)
 
         return meeting_list
 

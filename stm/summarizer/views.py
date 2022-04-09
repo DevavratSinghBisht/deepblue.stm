@@ -65,14 +65,14 @@ def summary(request):
                 elif extension == 'wav':
                     wav_file_path = file_location
                 
-                # print(asr.recognize(wav_file_path))
+
                 text = asr.recognize(wav_file_path)[0]
                 meeting_len = get_meeting_length_from_audio(wav_file_path)
                 num_speakers = "Number of speakers can only be found using transcripts."
                 action_points = action_point_classifier.get_action_points(text)
                 for ap in action_points:
                     messages.add_message(request, messages.INFO, ap)
-                summary = summarizer.summarize(text, max_slp, min_slp)
+                summary = summarizer.summarize(text_splitter(text), max_slp, min_slp)
 
             elif extension in video_extensions:
                 Path('summarizer/data/wav/').mkdir(exist_ok=True, parents=True)
@@ -84,7 +84,7 @@ def summary(request):
                 action_points = action_point_classifier.get_action_points(text)
                 for ap in action_points:
                     messages.add_message(request, messages.INFO, ap)
-                summary = summarizer.summarize(text, max_slp, min_slp)
+                summary = summarizer.summarize(text_splitter(text) , max_slp, min_slp)
 
             Path('summarizer/data/generated/').mkdir(exist_ok=True, parents=True)
             doc =docx.Document()

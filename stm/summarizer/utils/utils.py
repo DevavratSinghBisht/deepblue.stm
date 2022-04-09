@@ -69,3 +69,24 @@ def video_to_audio(video_path: str, audio_path: str) -> None:
     
     video = VideoFileClip(video_path)
     video.audio.write_audiofile(audio_path)
+
+def text_splitter(text, max_token_len=512):
+
+    meeting_str = ""
+    meeting_list = []
+
+    for statement in text.split("."):
+        if statement != "":
+            new_str = statement + "."
+            if len((meeting_str + new_str).split()) > max_token_len:
+                meeting_list.append(meeting_str)
+                meeting_str = new_str
+            else:
+                meeting_str += new_str
+
+    if len(meeting_list) == 0:
+        meeting_list.append(meeting_str)
+    elif meeting_str != meeting_list[-1]:
+        meeting_list.append(meeting_str)
+
+    return meeting_list
